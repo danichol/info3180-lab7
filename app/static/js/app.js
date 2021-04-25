@@ -2,9 +2,11 @@
 // Instantiate our main Vue Instance
 const app = Vue.createApp({
     data() {
-        return {
-
-        }
+        return {}    
+    }, 
+    components: {
+        'Home': Home,
+        'upload-form': uploadForm
     }
 });
 
@@ -56,6 +58,91 @@ const Home = {
         return {}
     }
 };
+
+const uploadForm ={
+    name: 'upload-form',
+    data(){
+        return{
+            displayFlash:false,
+            isSuccessUpload:false,
+            successmessage:"",
+            errormessage:"",
+        }
+    },
+
+    template: `
+    <div>
+        <h1> Upload Form </h1>
+        <div class ="alert alert-success" v-if="isSuccess">
+            <p v-for="success in successMessage">{{ success }}</p>
+        </div>
+
+        <div class="alert alert-danger" v-if="isError">
+            <ul>
+                <li v-for="error in errors">{{ error }}</li>
+            </ul>
+        </div>
+
+        <form @submit.prevent="uploadPhoto" method="POST" enctype="multipart/form-data" id="uploadForm">
+            <div class="form-group">
+                <label> Description: </label>
+                <textarea name="description" class="form-control"></textarea>
+                <label> Photo: </label>
+                <input type="file" name="photo"></input>  
+            </div>
+        <button class="btn btn-primary mb-2">Submit</button>
+        </form>
+        
+    </div>
+    `,
+    data: function(){
+        return{
+            errors: [],
+            successMessage: [],
+            isSuccess: false,
+            isError: false
+        };
+    },
+
+    methods: {
+        uploadPhoto(){
+            let self=this;
+            let uploadForm= document.getElementById('uploadForm');
+            let form_data= new FormData (uploadForm);
+
+            fetch("/api/upload",{
+                method: 'POST',
+                body: form_data,
+                headers: {
+                    'X-CSRFToken': token
+                },
+                credentials: 'same-origin'
+            })
+           .then(function(response) {
+               return response.json();
+           })
+           .then(function (jsonResponse){
+               console.log(jsonResponse);
+
+               if (jsonResponse.errors){
+                   self.isError=true;
+                   self.isSuccess=false;
+                   self.errors = jsonResponse.errors;
+               }
+               else if (jsonResponse.upload){
+                   self.isError=false;
+                   self.isSuccess = true;
+                   self.successMessage = jsonResponse.upload;
+               }
+           })
+
+           .catch(function (error) {
+               console.log(error);
+           });
+        }
+    },
+}; 
+
 
 const NotFound = {
     name: 'NotFound',
