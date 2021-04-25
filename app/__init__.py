@@ -3,7 +3,7 @@ from app.config import Config
 from flas_wtf.csrf import CSRFProtect
 
 app = Flask(__name__)
-csrd = CSRFProtect(app)
+csrf = CSRFProtect(app)
 
 app.config.from_object(Config)
 
