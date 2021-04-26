@@ -30,22 +30,6 @@ app.component('app-header', {
     `
 });
 
-app.component('app-footer', {
-    name: 'AppFooter',
-    template: `
-    <footer>
-        <div class="container">
-            <p>Copyright &copy; {{ year }} Flask Inc.</p>
-        </div>
-    </footer>
-    `,
-    data() {
-        return {
-            year: (new Date).getFullYear()
-        }
-    }
-});
-
 const Home = {
     name: 'Home',
     template: `
@@ -142,6 +126,26 @@ const uploadForm ={
         }
     },
 }; 
+
+
+
+
+app.component('app-footer', {
+    name: 'AppFooter',
+    template: `
+    <footer>
+        <div class="container">
+            <p>Copyright &copy; {{ year }} Flask Inc.</p>
+        </div>
+    </footer>
+    `,
+    data() {
+        return {
+            year: (new Date).getFullYear()
+        }
+    }
+});
+
 
 
 const NotFound = {
