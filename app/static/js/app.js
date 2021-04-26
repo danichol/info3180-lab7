@@ -164,7 +164,7 @@ const NotFound = {
 const routes = [
     { path: "/", component: Home },
     // Put other routes here
-
+    { path: "/upload", component: uploadForm},
     // This is a catch all route in case none of the above matches
     { path: '/:pathMatch(.*)*', name: 'not-found', component: NotFound }
 ];
@@ -174,6 +174,5 @@ const router = VueRouter.createRouter({
     routes, // short for `routes: routes`
 });
 
-app.use(router);
-
+app.use(router)
 app.mount('#app');
